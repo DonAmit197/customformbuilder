@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-const Formio = require('formiojs');
+const Formio = require('bcformiojs');
 
 console.log(Formio);
 const _formiojs = Formio.Formio;
