@@ -1,3 +1,8 @@
+@import 'bootstrap/dist/css/bootstrap.min.css';
+@import 'formiojs/dist/formio.full.min.css';
+@import 'font-awesome/css/font-awesome.min.css';
+@import './components/styles/Builder.css';
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -10,4 +15,37 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+* {
+  position: relative;
+}
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+[ref='sidebar-container'] > .btn {
+  width: 100%;
+}
+.builder-component.essential-item {
+  border: 2px dashed #dadada;
+  padding: 32px;
+}
+.builder-component.essential-item:before {
+  content: 'Essential';
+  display: block;
+  position: absolute;
+  right: 0;
+  top: 0;
+  background: #e3e9f3;
+  font-size: 11px;
+  font-weight: bold;
+  text-transform: uppercase;
+  padding: 3px 12px;
+  border-radius: 2px;
+  border: 2px solid #ffffff;
+  color: #5d5d5d;
+}
+.btn-move {
+  padding: 12px;
 }

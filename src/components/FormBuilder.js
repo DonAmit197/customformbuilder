@@ -1,4 +1,9 @@
 import { useEffect } from 'react';
+import builderSettings from './builderSettings';
+import Tab from 'react-bootstrap/Tab';
+import Tabs from 'react-bootstrap/Tabs';
+import Card from 'react-bootstrap/Card';
+
 const Formio = require('bcformiojs');
 
 console.log(Formio);
@@ -18,78 +23,47 @@ function FormBuilder({ formComponent }) {
     var subJSON = document.getElementById('subjson');
     var builder = null;
     var setDisplay = function (display) {
-      if (builder) {
-        builder.destroy();
-        document.getElementById('builder').innerHTML = '';
-      }
-      _formiojs
-        .builder(
-          document.getElementById('builder'),
-          {
-            display: display,
-            components: defaultComp,
-            settings: {
-              pdf: {
-                id: '1ec0f8ee-6685-5d98-a847-26f67b67d6f0',
-                src: 'https://files.form.io/pdf/5692b91fd1028f01000407e3/file/1ec0f8ee-6685-5d98-a847-26f67b67d6f0',
-              },
-            },
-          },
-          {
-            baseUrl: 'https://examples.form.io',
-          }
-        )
-        .then(function (instance) {
-          builder = instance;
-          var onForm = function (form) {
-            form.on('change', function () {
-              subJSON.innerHTML = '';
-              subJSON.appendChild(
-                document.createTextNode(
-                  JSON.stringify(form.submission, null, 4)
-                )
-              );
-            });
-          };
+      const components = formComponent.components;
+      builderSettings(
+        builder,
+        _formiojs,
+        components,
+        display,
+        defaultComp,
+        subJSON,
+        jsonElement,
+        formElement
+      );
 
-          var onBuild = function (build) {
-            jsonElement.innerHTML = '';
-            formElement.innerHTML = '';
-            jsonElement.appendChild(
-              document.createTextNode(JSON.stringify(instance.schema, null, 4))
-            );
-            _formiojs.createForm(formElement, instance.form).then(onForm);
-          };
-
-          var onReady = function () {
-            var jsonElement = document.getElementById('json');
-            var formElement = document.getElementById('formio');
-            instance.on('change', onBuild);
-          };
-
-          instance.ready.then(onReady);
-        });
     };
 
     // Handle the form selection.
-    var formSelect = document.getElementById('form-select');
-    formSelect.addEventListener('change', function () {
-      setDisplay(this.value);
-    });
+    // var formSelect = document.getElementById('form-select');
+    // formSelect.addEventListener('change', function () {
+    //   setDisplay(this.value);
+    // });
 
     setDisplay('form');
   }, [formComponent]);
 
   return (
     <>
-      <select className="form-control" id="form-select">
-        <option value="form">Form</option>
-        <option value="wizard">Wizard</option>
-        <option value="pdf">PDF</option>
-      </select>
-      <div id="builder"></div> <div id="subjson"></div>
-      <div id="json"></div>
-      <div id="formio"></div>
+      <Tabs defaultActiveKey="edit" id="builderTabs" className="mb-3">
+        <Tab eventKey="edit" title="Edit">
+          {/* <select className="form-control" id="form-select">
+            <option value="form">Form</option>
+            <option value="wizard">Wizard</option>
+            <option value="pdf">PDF</option>
+          </select> */}
+          <div id="builder"></div> <div id="subjson"></div>
+        </Tab>
+        <Tab eventKey="view" title="View">
+          <div id="formio"></div>
+        </Tab>
+        <Tab eventKey="json" title="Json">
+          <div id="json"></div>
+        </Tab>
+      </Tabs>
     </>
   );
 }
